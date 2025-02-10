@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: mi-app-php
+    env: docker
+    plan: free
+    region: oregon
+    rootDir: .
+    dockerfilePath: ./Dockerfile
+    envVars:
+      - key: PORT
+        value: 80
