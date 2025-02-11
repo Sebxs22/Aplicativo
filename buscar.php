@@ -8,15 +8,10 @@ if (!$conexion) {
 }
 
 // Verificar si se ha enviado el nombre del producto a través de la URL
-if (isset($_GET['nombre'])) {
-    $nombre = trim($_GET['nombre']); // Eliminar espacios extra al inicio y final
+$nombre = isset($_GET['nombre']) ? trim($_GET['nombre']) : '';
 
-    // Validar que el nombre no esté vacío
-    if (empty($nombre)) {
-        echo "<p style='color:red;'>Por favor ingresa un nombre válido para buscar.</p>";
-        exit();
-    }
-
+// Si se proporciona el nombre del producto
+if (!empty($nombre)) {
     // Preparar la consulta SQL para buscar productos por nombre
     $sql = "SELECT * FROM productos WHERE nombre LIKE ?";
     $stmt = $conexion->prepare($sql);
@@ -32,13 +27,11 @@ if (isset($_GET['nombre'])) {
 
     // Ejecutar la consulta
     $stmt->execute();
-
     // Obtener el resultado
     $result = $stmt->get_result();
 
     // Verificar si hay resultados
     if ($result->num_rows > 0) {
-        // Mostrar la tabla de productos
         echo "<h2>Productos encontrados:</h2>";
         echo "<table border='1' cellpadding='10' cellspacing='0' style='border-collapse: collapse; width: 100%;'>";
         echo "<thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th></tr></thead>";
@@ -57,14 +50,39 @@ if (isset($_GET['nombre'])) {
 
         echo "</tbody></table>";
     } else {
-        echo "<p style='color:red;'>No se encontraron productos con ese nombre.</p>";
+        echo "<p style='color:red;'>Producto no encontrado.</p>";
     }
 
     // Cerrar la declaración y la conexión
     $stmt->close();
-    $conexion->close();
 } else {
-    // Si no se ha enviado un nombre, mostrar un mensaje de error
-    echo "<p style='color:red;'>Por favor, ingresa el nombre de un producto.</p>";
+    // Si no se ha proporcionado un nombre, mostrar todos los productos
+    $sql = "SELECT * FROM productos"; // Consulta para obtener todos los productos
+    $result = $conexion->query($sql);
+
+    if ($result->num_rows > 0) {
+        echo "<h2>Todos los productos:</h2>";
+        echo "<table border='1' cellpadding='10' cellspacing='0' style='border-collapse: collapse; width: 100%;'>";
+        echo "<thead><tr><th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Stock</th></tr></thead>";
+        echo "<tbody>";
+
+        // Recorrer los resultados y agregarlos a la tabla
+        while ($row = $result->fetch_assoc()) {
+            echo "<tr>";
+            echo "<td>" . htmlspecialchars($row['id']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['nombre']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['descripcion']) . "</td>";
+            echo "<td>$" . htmlspecialchars($row['precio']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['stock']) . "</td>";
+            echo "</tr>";
+        }
+
+        echo "</tbody></table>";
+    } else {
+        echo "<p style='color:red;'>Producto no encontrado.</p>";
+    }
 }
+
+// Cerrar la conexión
+$conexion->close();
 ?>
