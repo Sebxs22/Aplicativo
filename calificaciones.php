@@ -10,7 +10,7 @@ $resultado = ejecutarConsulta($conexion, $sql);
 
 // Mostrar la tabla con las calificaciones
 if ($resultado->num_rows > 0) {
-    echo "<table border='1'>
+    echo "<center><table border='1'>
             <tr>
                 <th>Nombre</th>
                 <th>Producto</th>
@@ -42,7 +42,7 @@ if ($resultado->num_rows > 0) {
               </tr>";
     }
 
-    echo "</table>";
+    echo "</table><center>";
 } else {
     echo "No hay calificaciones disponibles.";
 }
