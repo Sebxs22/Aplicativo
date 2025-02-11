@@ -74,25 +74,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 break;
             
 
-        case 'delete':
-            $id = intval($_POST['id'] ?? 0);
-
-            // Validar el ID
-            if ($id <= 0) {
-                echo json_encode(["success" => false, "message" => "ID inválido"]);
-                exit();
-            }
-
-            $sql = "DELETE FROM productos WHERE id=?";
-            $params = [$id];
-            $types = "i";
-
-            if (ejecutarConsulta($conexion, $sql, $params, $types)) {
-                echo json_encode(["success" => true, "message" => "Producto eliminado"]);
-            } else {
-                echo json_encode(["success" => false, "message" => "Error al eliminar"]);
-            }
-            break;
+                case 'delete':
+                    // Obtener el ID del producto
+                    $id = intval($_POST['id'] ?? 0);
+                
+                    // Validar el ID
+                    if ($id <= 0) {
+                        echo json_encode(["success" => false, "message" => "ID inválido"]);
+                        exit();
+                    }
+                
+                    // Preparar la consulta SQL para eliminar
+                    $sql = "DELETE FROM productos WHERE id=?";
+                    $stmt = $conexion->prepare($sql);
+                
+                    // Verificar si la consulta se preparó correctamente
+                    if ($stmt === false) {
+                        echo json_encode(["success" => false, "message" => "Error al preparar la consulta"]);
+                        exit();
+                    }
+                
+                    // Enlazar parámetros y ejecutar
+                    $stmt->bind_param("i", $id);
+                
+                    // Ejecutar la consulta y verificar si se eliminó el producto
+                    if ($stmt->execute()) {
+                        echo json_encode(["success" => true, "message" => "Producto eliminado"]);
+                    } else {
+                        echo json_encode(["success" => false, "message" => "Error al eliminar producto: " . $stmt->error]);
+                    }
+                
+                    // Cerrar la declaración y la conexión
+                    $stmt->close();
+                    cerrarConexion($conexion);
+                    break;
+                
 
         default:
             echo json_encode(["success" => false, "message" => "Acción no válida"]);
