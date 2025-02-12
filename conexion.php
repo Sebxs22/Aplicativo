@@ -1,16 +1,10 @@
 <?php
-// Credenciales de conexión a Railway
-//$hostname = 'junction.proxy.rlwy.net';
-//$database = 'railway';
-//$username = 'root';
-//$password = 'uiXjDgOdNwiXNBSfhLWqsllScFlHjOER';
-//$port = 20359;
-// Credenciales de conexión a Railway
+// Nueva configuración de conexión a Railway
 $hostname = 'roundhouse.proxy.rlwy.net';
 $database = 'railway';
 $username = 'root';
 $password = 'HxyORDtpVzlsCTvQBKwoVURyRryHgXgV';
-$port = 20359;
+$port = 48320;
 
 try {
     // Crear conexión
@@ -23,8 +17,8 @@ try {
 
     // Establecer charset a utf8
     $conexion->set_charset("utf8");
-    
-    // Opcional: mostrar mensaje de éxito
+
+    // Opcional: mensaje de éxito (comentar en producción)
     // echo "Conexión exitosa a la base de datos";
 
 } catch (Exception $e) {
