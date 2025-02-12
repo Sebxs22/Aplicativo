@@ -1,10 +1,16 @@
 <?php
 // Credenciales de conexión a Railway
-$hostname = 'junction.proxy.rlwy.net';
+//$hostname = 'junction.proxy.rlwy.net';
+//$database = 'railway';
+//$username = 'root';
+//$password = 'uiXjDgOdNwiXNBSfhLWqsllScFlHjOER';
+//$port = 20359;
+// Credenciales de conexión a Railway
+$hostname = 'roundhouse.proxy.rlwy.net';
 $database = 'railway';
 $username = 'root';
-$password = 'uiXjDgOdNwiXNBSfhLWqsllScFlHjOER';
-$port = 20359;
+$password = 'HxyORDtpVzlsCTvQBKwoVURyRryHgXgV';
+$port = 48320;
 
 try {
     // Crear conexión
